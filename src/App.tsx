@@ -5,7 +5,7 @@ import "./App.css";
 
 function App() {
   return (
-    <Router basename="/jumbotron/">
+    <Router>
       <div id="App">
         <Routes>
           {/* Base route */}
