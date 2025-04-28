@@ -25,7 +25,8 @@ export const JumboTron = (props: JumboTronProps) => {
     console.log("JumboTron mounted with roomId:", roomId);
     if (!roomId) return;
 
-    const newSocket = io(getEndpoint());
+    const endpoint = getEndpoint();
+    const newSocket = io(endpoint);
 
     newSocket.emit("joinRoom", { roomCode: roomId });
 
@@ -44,7 +45,7 @@ export const JumboTron = (props: JumboTronProps) => {
 
     newSocket.on("videoIdUpdated", (videoId) => {
       if (videoId) {
-        videoRef.current.src = `http://localhost:3001/videoPlayer?videoId=${videoId}&videoPlaybackTime=0`;
+        videoRef.current.src = `${endpoint}/videoPlayer?videoId=${videoId}&videoPlaybackTime=0`;
       } else {
         videoRef.current.src = `passive.mp4`;
       }

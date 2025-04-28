@@ -1,13 +1,12 @@
+import { getEndpoint } from "../helpers/endpoints";
+
 type VideoStreamsProps = {
   updateVideoId: (videoId: string) => void;
 };
 
 export const VideoStreams = (props: VideoStreamsProps) => {
   const { updateVideoId } = props;
-  const videoEndpoint = import.meta.env.VITE_API_ENDPOINT
-
-  console.log("videoEndpoint", videoEndpoint);
-  console.log("videoEndpoint", import.meta.env.VITE_API_ENDPOINT);
+  const videoEndpoint = getEndpoint();
 
   const handleVideoClickedEvent = (e: any, id:string) => {
     console.log(e.target.currentTime);
