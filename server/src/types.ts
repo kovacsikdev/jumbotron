@@ -9,6 +9,7 @@ export type GameStatsType = {
   quarter: number;
   possession: string;
   ballOn: number;
+  videoId: string;
 };
 
 export type GameVideoType = {

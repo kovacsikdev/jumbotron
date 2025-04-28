@@ -4,6 +4,6 @@
  */
 export const getEndpoint = () => {
   const env = import.meta.env.PROD;
-  const endpoint = env ? import.meta.env.VITE_API_ENDPOINT : "ws://localhost:3001";
+  const endpoint = env ? import.meta.env.VITE_API_ENDPOINT : "http://localhost:3001";
   return endpoint;
 }

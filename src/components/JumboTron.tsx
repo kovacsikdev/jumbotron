@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { getEndpoint } from "../helpers/endpoints";
 
@@ -7,6 +7,7 @@ type JumboTronProps = {
 };
 
 export const JumboTron = (props: JumboTronProps) => {
+  const videoRef = useRef<any>("");
   const INITIAL_GAME_TIME = "15:00"; // 15 minutes in MM:SS format
   const { roomId } = props;
   const [score1, setScore1] = useState(0);
@@ -41,6 +42,15 @@ export const JumboTron = (props: JumboTronProps) => {
       setBallOn(data.ballOn);
     });
 
+    newSocket.on("videoIdUpdated", (videoId) => {
+      if (videoId) {
+        videoRef.current.src = `http://localhost:3001/videoPlayer?videoId=${videoId}&videoPlaybackTime=0`;
+      } else {
+        videoRef.current.src = `passive.mp4`;
+      }
+      videoRef.current.load();
+    });
+
     newSocket.on("gameTimeUpdated", (time) => {
       setGameTime(time);
     });
@@ -51,13 +61,26 @@ export const JumboTron = (props: JumboTronProps) => {
   }, [roomId]);
 
   return (
-    <div className="relative mb-8">
+    <div className="relative">
       <div className="border rounded-lg p-2 w-180 h-120">
-        <img src="placeholder.jpg" alt="Placeholder" />
-        <div className="absolute bottom-0 left-0 w-full flex flex-wrap justify-between items-center p-4 bg-gray-800 text-white">
+        <video
+          ref={videoRef}
+          controls={true}
+          className="w-full"
+          autoPlay
+          playsInline
+          loop
+          muted
+        >
+          <source src={"passive.mp4"} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div className="absolute bottom-[10px] w-[844px] flex flex-wrap justify-between items-center p-4 bg-gray-800 h-[120px] rounded-b-lg">
           <div className="relative flex items-center justify-center h-16">
             <div>Home</div>
-            {possession === "home" && (<div className="absolute bottom-0">^</div>)}
+            {possession === "home" && (
+              <div className="absolute bottom-0">^</div>
+            )}
           </div>
           <div className="border rounded-lg flex items-center justify-center">
             <div className="p-2 text-3xl">{score1}</div>
@@ -96,7 +119,9 @@ export const JumboTron = (props: JumboTronProps) => {
           </div>
           <div className="relative flex items-center justify-center h-16">
             <div>Away</div>
-            {possession === "away" && (<div className="absolute bottom-0">^</div>)}
+            {possession === "away" && (
+              <div className="absolute bottom-0">^</div>
+            )}
           </div>
         </div>
       </div>

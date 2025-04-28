@@ -4,7 +4,12 @@ import { Link } from "react-router-dom";
 import { JumboTron } from "../components/JumboTron";
 import { Counter } from "../components/Counter";
 import { VideoStreams } from "../components/VideoStreams";
-import { validateScore, validateTimeouts, validateQuarter, validateYards } from "../helpers/validations";
+import {
+  validateScore,
+  validateTimeouts,
+  validateQuarter,
+  validateYards,
+} from "../helpers/validations";
 import { GameStatsType } from "../helpers/types";
 import { getEndpoint } from "../helpers/endpoints";
 
@@ -64,6 +69,12 @@ export const ControlCenter = () => {
     }
     setGameTime(INITIAL_GAME_TIME);
   };
+
+  const updateVideoId = (videoId: string) => {
+    if (newSocketRef.current) {
+      newSocketRef.current.emit("updateVideoStream", videoId);
+    }
+  }
 
   useEffect(() => {
     // Debounce the network state update to avoid too many calls
@@ -126,151 +137,171 @@ export const ControlCenter = () => {
         Back to main
       </Link>
       <h2 className="m-2">{`${
-        roomId ? `Room: ${roomId} (send to audience to view jumbotron live)` : "creating room..."
+        roomId
+          ? `Room: ${roomId} (send to audience to view jumbotron live)`
+          : "creating room..."
       }`}</h2>
 
-      <div className="mb-8 flex justify-evenly items-center mt-4">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            Preview of what the jumbotron looks like to viewers
-          </h2>
-          <JumboTron roomId={roomId} />
-        </div>
-        <div className="flex flex-col items-center justify-between">
-          <div className="flex justify-around items-center mb-4 w-full">
-            <div id="game-time" className="flex flex-col items-center">
-              <h2 className="text-xl font-semibold mb-2">Game Time</h2>
-              <div className="text-6xl font-bold mb-4">{gameTime}</div>
-              <div className="flex space-x-2">
-                <button
-                  className="px-4 py-2 bg-green-500 text-white rounded focus:outline-none"
-                  onClick={startGameTimer}
-                >
-                  Start
-                </button>
-                <button
-                  className="px-4 py-2 bg-yellow-500 text-white rounded focus:outline-none"
-                  onClick={pauseGameTimer}
-                >
-                  Pause
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 text-white rounded focus:outline-none"
-                  onClick={resetGameTimer}
-                >
-                  Reset
-                </button>
-              </div>
-            </div>
-            <div className="flex flex-col items-center justify-between">
-              <h2 className="text-xl font-semibold mb-2">Possesion</h2>
-              <div>
-                <label className="inline-flex items-center cursor-pointer">
-                  <input type="checkbox" value="" className="sr-only peer" onChange={togglePossession} />
-                  <span className="m-3">
-                    Home
-                  </span>
-                  <div className="relative w-21 h-11 rounded-full peer dark:bg-gray-500 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-10 after:w-10 after:transition-all dark:border-gray-600 peer-checked:bg-gray-500"></div>
-                  <span className="m-3">
-                    Away
-                  </span>
-                </label>
-              </div>
-            </div>
+      <div className="flex">
+        {/* Media section for jumbotron and video selection */}
+        <div className="flex flex-col">
+          <div className="flex flex-col items-center justify-between mb-2">
+            <h2 className="text-xl font-semibold mb-2">
+              Preview of what the jumbotron looks like to viewers
+            </h2>
+            <JumboTron roomId={roomId} />
           </div>
-          <div className="flex">
-            <div className="m-4">
-              <div>Quarter:</div>
-              <Counter
-                value={quarter}
-                setValue={(value: number) => setQuarter(validateQuarter(value))}
-              />
-            </div>
-            <div className="m-4">
-              <div>Ball On:</div>
-              <Counter
-                value={ballOn}
-                setValue={(value: number) => setBallOn(validateYards(value))}
-                extraIncrementAmount={5}
-                extraIncrementCount={true}
-              />
-            </div>
-            <div className="m-4">
-              <div>Down:</div>
-              <Counter
-                value={down}
-                setValue={(value: number) => setDown(validateQuarter(value))}
-              />
-            </div>
-            <div className="m-4">
-              <div>Yards To Go:</div>
-              <Counter
-                value={yardsToGo}
-                setValue={(value: number) => setYardsToGo(validateYards(value))}
-                extraIncrementAmount={5}
-                extraIncrementCount={true}
-              />
-            </div>
+          <div>
+            <VideoStreams updateVideoId={updateVideoId} />
           </div>
         </div>
-      </div>
 
-      <div className="mb-8 flex justify-evenly items-center mt-4">
-        <VideoStreams />
-        {/* Home Team Section */}
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Home Team</h2>
-          <div className="p-4">
-            <p>
-              Team Name: <strong>Home Team</strong>
-            </p>
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col items-center justify-between ml-2 mr-8">
-                <div>Score</div>
+        {/* Game stat controls */}
+        <div className="flex flex-col">
+          <div className="flex flex-col items-center justify-between">
+            <div className="flex justify-around items-center mb-4 w-full">
+              <div id="game-time" className="flex flex-col items-center">
+                <h2 className="text-xl font-semibold mb-2">Game Time</h2>
+                <div className="text-6xl font-bold mb-4">{gameTime}</div>
+                <div className="flex space-x-2">
+                  <button
+                    className="px-4 py-2 bg-green-500 text-white rounded focus:outline-none"
+                    onClick={startGameTimer}
+                  >
+                    Start
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-yellow-500 text-white rounded focus:outline-none"
+                    onClick={pauseGameTimer}
+                  >
+                    Pause
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-red-500 text-white rounded focus:outline-none"
+                    onClick={resetGameTimer}
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+              <div className="flex flex-col items-center justify-between">
+                <h2 className="text-xl font-semibold mb-2">Possesion</h2>
+                <div>
+                  <label className="inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      value=""
+                      className="sr-only peer"
+                      onChange={togglePossession}
+                    />
+                    <span className="m-3">Home</span>
+                    <div className="relative w-21 h-11 rounded-full peer dark:bg-gray-500 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-10 after:w-10 after:transition-all dark:border-gray-600 peer-checked:bg-gray-500"></div>
+                    <span className="m-3">Away</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div className="flex">
+              <div className="m-4">
+                <div>Quarter:</div>
                 <Counter
-                  value={score1}
-                  setValue={(value: number) => setScore1(validateScore(value))}
-                  extraIncrementCount={true}
-                  extraIncrementAmount={3}
+                  value={quarter}
+                  setValue={(value: number) =>
+                    setQuarter(validateQuarter(value))
+                  }
                 />
               </div>
-              <div className="flex flex-col items-center justify-between ml-8 mr-2">
-                <div>T.O</div>
+              <div className="m-4">
+                <div>Ball On:</div>
                 <Counter
-                  value={timeouts1}
+                  value={ballOn}
+                  setValue={(value: number) => setBallOn(validateYards(value))}
+                  extraIncrementAmount={5}
+                  extraIncrementCount={true}
+                />
+              </div>
+              <div className="m-4">
+                <div>Down:</div>
+                <Counter
+                  value={down}
+                  setValue={(value: number) => setDown(validateQuarter(value))}
+                />
+              </div>
+              <div className="m-4">
+                <div>Yards To Go:</div>
+                <Counter
+                  value={yardsToGo}
                   setValue={(value: number) =>
-                    setTimeouts1(validateTimeouts(value))
+                    setYardsToGo(validateYards(value))
                   }
+                  extraIncrementAmount={5}
+                  extraIncrementCount={true}
                 />
               </div>
             </div>
           </div>
-        </div>
-        {/* Away Team Section */}
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Away Team</h2>
-          <div className="p-4">
-            <p>
-              Team Name: <strong>Away Team</strong>
-            </p>
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col items-center justify-between ml-2 mr-8">
-                <div>Score</div>
-                <Counter
-                  value={score2}
-                  setValue={(value: number) => setScore2(validateScore(value))}
-                  extraIncrementCount={true}
-                  extraIncrementAmount={3}
-                />
+
+          <div className="mb-8 flex justify-evenly mt-4">
+            {/* Home Team Section */}
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Home Team</h2>
+              <div className="p-4">
+                <p>
+                  Team Name: <strong>Home Team</strong>
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col items-center justify-between ml-2 mr-8">
+                    <div>Score</div>
+                    <Counter
+                      value={score1}
+                      setValue={(value: number) =>
+                        setScore1(validateScore(value))
+                      }
+                      extraIncrementCount={true}
+                      extraIncrementAmount={3}
+                    />
+                  </div>
+                  <div className="flex flex-col items-center justify-between ml-8 mr-2">
+                    <div>T.O</div>
+                    <Counter
+                      value={timeouts1}
+                      setValue={(value: number) =>
+                        setTimeouts1(validateTimeouts(value))
+                      }
+                    />
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col items-center justify-between ml-8 mr-2">
-                <div>T.O</div>
-                <Counter
-                  value={timeouts2}
-                  setValue={(value: number) =>
-                    setTimeouts2(validateTimeouts(value))
-                  }
-                />
+            </div>
+            {/* Away Team Section */}
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Away Team</h2>
+              <div className="p-4">
+                <p>
+                  Team Name: <strong>Away Team</strong>
+                </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col items-center justify-between ml-2 mr-8">
+                    <div>Score</div>
+                    <Counter
+                      value={score2}
+                      setValue={(value: number) =>
+                        setScore2(validateScore(value))
+                      }
+                      extraIncrementCount={true}
+                      extraIncrementAmount={3}
+                    />
+                  </div>
+                  <div className="flex flex-col items-center justify-between ml-8 mr-2">
+                    <div>T.O</div>
+                    <Counter
+                      value={timeouts2}
+                      setValue={(value: number) =>
+                        setTimeouts2(validateTimeouts(value))
+                      }
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
