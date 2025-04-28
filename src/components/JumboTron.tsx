@@ -63,7 +63,7 @@ export const JumboTron = (props: JumboTronProps) => {
 
   return (
     <div className="relative">
-      <div className="border rounded-lg p-2 w-180 h-120">
+      <div className="border rounded-lg p-2 w-[864px] h-120">
         <video
           ref={videoRef}
           controls={true}

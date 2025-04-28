@@ -142,7 +142,7 @@ export const ControlCenter = () => {
           : "creating room..."
       }`}</h2>
 
-      <div className="flex">
+      <div className="flex justify-around items-center">
         {/* Media section for jumbotron and video selection */}
         <div className="flex flex-col">
           <div className="flex flex-col items-center justify-between mb-2">
