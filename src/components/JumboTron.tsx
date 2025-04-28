@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { getEndpoint } from "../helpers/endpoints";
 
 type JumboTronProps = {
   roomId: string;
@@ -23,8 +24,7 @@ export const JumboTron = (props: JumboTronProps) => {
     console.log("JumboTron mounted with roomId:", roomId);
     if (!roomId) return;
 
-    const endpoint = "ws://localhost:3001";
-    const newSocket = io(endpoint);
+    const newSocket = io(getEndpoint());
 
     newSocket.emit("joinRoom", { roomCode: roomId });
 

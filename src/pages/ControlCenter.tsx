@@ -6,6 +6,7 @@ import { Counter } from "../components/Counter";
 import { VideoStreams } from "../components/VideoStreams";
 import { validateScore, validateTimeouts, validateQuarter, validateYards } from "../helpers/validations";
 import { GameStatsType } from "../helpers/types";
+import { getEndpoint } from "../helpers/endpoints";
 
 export const ControlCenter = () => {
   const INITIAL_GAME_TIME = "15:00"; // 15 minutes in MM:SS format
@@ -105,8 +106,7 @@ export const ControlCenter = () => {
   }, [gameTime]);
 
   useEffect(() => {
-    const endpoint = "ws://localhost:3001";
-    newSocketRef.current = io(endpoint);
+    newSocketRef.current = io(getEndpoint());
 
     newSocketRef.current.on("roomCreated", (roomId: string) => {
       setRoomId(roomId);
