@@ -1,4 +1,3 @@
-import { useRef } from "react";
 import { getEndpoint } from "../helpers/endpoints";
 
 type VideoStreamsProps = {
@@ -7,7 +6,7 @@ type VideoStreamsProps = {
 
 export const VideoStreams = (props: VideoStreamsProps) => {
   const { updateVideoId } = props;
-  const videoEndpointRef = useRef<any>(getEndpoint());
+  const videoEndpoint = getEndpoint();
 
   const handleVideoClickedEvent = (e: any, id:string) => {
     console.log(e.target.currentTime);
@@ -32,7 +31,7 @@ export const VideoStreams = (props: VideoStreamsProps) => {
                 muted
               >
                 <source
-                  src={`${videoEndpointRef.current}/videoPlayer?videoId=game1&videoPlaybackTime=0`}
+                  src={`${videoEndpoint}/videoPlayer?videoId=game1&videoPlaybackTime=0`}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
@@ -50,7 +49,7 @@ export const VideoStreams = (props: VideoStreamsProps) => {
                 muted
               >
                 <source
-                  src={`${videoEndpointRef.current}/videoPlayer?videoId=game2&videoPlaybackTime=0`}
+                  src={`${videoEndpoint}/videoPlayer?videoId=game2&videoPlaybackTime=0`}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
@@ -68,7 +67,7 @@ export const VideoStreams = (props: VideoStreamsProps) => {
                 muted
               >
                 <source
-                  src={`${videoEndpointRef.current}/videoPlayer?videoId=game3&videoPlaybackTime=0`}
+                  src={`${videoEndpoint}/videoPlayer?videoId=game3&videoPlaybackTime=0`}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
@@ -86,7 +85,7 @@ export const VideoStreams = (props: VideoStreamsProps) => {
                 muted
               >
                 <source
-                  src={`${videoEndpointRef.current}/videoPlayer?videoId=game4&videoPlaybackTime=0`}
+                  src={`${videoEndpoint}/videoPlayer?videoId=game4&videoPlaybackTime=0`}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
@@ -103,7 +102,7 @@ export const VideoStreams = (props: VideoStreamsProps) => {
                 muted
               >
                 <source
-                  src={`${videoEndpointRef.current}/videoPlayer?videoId=referee&videoPlaybackTime=0`}
+                  src={`${videoEndpoint}/videoPlayer?videoId=referee&videoPlaybackTime=0`}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
@@ -120,7 +119,7 @@ export const VideoStreams = (props: VideoStreamsProps) => {
                 muted
               >
                 <source
-                  src={`${videoEndpointRef.current}/videoPlayer?videoId=crowd&videoPlaybackTime=0`}
+                  src={`${videoEndpoint}/videoPlayer?videoId=crowd&videoPlaybackTime=0`}
                   type="video/mp4"
                 />
                 Your browser does not support the video tag.
