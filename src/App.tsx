@@ -5,12 +5,12 @@ import "./App.css";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/jumbotron/">
       <div id="App">
         <Routes>
           {/* Base route */}
           <Route
-            path="/jumbotron"
+            path="/"
             element={
               <div className="flex flex-col items-center justify-center h-screen">
                 <h1 className="text-4xl font-bold mb-4">
@@ -20,19 +20,19 @@ function App() {
                   Please use a large screen for the best experience. This may
                   not work well on mobile devices or tablets.
                 </div>
-                <Link to="/jumbotron/control-center" className="px-4 py-2">
+                <Link to="/control-center" className="px-4 py-2">
                   Go to Control Center
                 </Link>
-                <Link to="/jumbotron/audience" className="px-4 py-2">
+                <Link to="/audience" className="px-4 py-2">
                   Go to Audience
                 </Link>
               </div>
             }
           />
           {/* Control Center route */}
-          <Route path="/jumbotron/control-center" element={<ControlCenter />} />
+          <Route path="/control-center" element={<ControlCenter />} />
           {/* Audience route */}
-          <Route path="/jumbotron/audience" element={<Audience />} />
+          <Route path="/audience" element={<Audience />} />
         </Routes>
       </div>
     </Router>

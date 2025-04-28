@@ -53,7 +53,7 @@ export const JumboTron = (props: JumboTronProps) => {
   return (
     <div className="relative mb-8">
       <div className="border rounded-lg p-2 w-180 h-120">
-        <img src="./src/assets/placeholder.jpg" alt="Placeholder" />
+        <img src="placeholder.jpg" alt="Placeholder" />
         <div className="absolute bottom-0 left-0 w-full flex flex-wrap justify-between items-center p-4 bg-gray-800 text-white">
           <div className="relative flex items-center justify-center h-16">
             <div>Home</div>
