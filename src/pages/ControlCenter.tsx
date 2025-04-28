@@ -122,7 +122,7 @@ export const ControlCenter = () => {
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold mb-4">Football Game Control Center</h1>
-      <Link to="/jumbotron" className="px-4 py-2">
+      <Link to="/" className="px-4 py-2">
         Back to main
       </Link>
       <h2 className="m-2">{`${

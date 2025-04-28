@@ -10,7 +10,7 @@ export const Audience = () => {
 
   const handleGoToRoom = () => {
     if (goToRoom.length > 0) {
-      window.location.href = `/jumbotron/audience?roomId=${goToRoom}`;
+      window.location.href = `/jumbotron/#/audience?roomId=${goToRoom}`;
     }
   };
 
@@ -18,7 +18,7 @@ export const Audience = () => {
     <div className="flex flex-col items-center justify-center h-screen">
       <h1 className="text-4xl font-bold mb-4">Audience</h1>
       <p>What the audience sees on the Jumbotron</p>
-      <Link to="/jumbotron" className="px-4 py-2">
+      <Link to="/" className="px-4 py-2">
         Back to main
       </Link>
       {roomId ? (
