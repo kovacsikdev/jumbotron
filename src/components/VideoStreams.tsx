@@ -1,5 +1,3 @@
-import { getEndpoint } from "../helpers/endpoints";
-
 type VideoStreamsProps = {
   updateVideoId: (videoId: string) => void;
 };
