@@ -43,9 +43,11 @@ export const JumboTron = (props: JumboTronProps) => {
       setBallOn(data.ballOn);
     });
 
-    newSocket.on("videoIdUpdated", (videoId) => {
-      if (videoId) {
-        videoRef.current.src = `${endpoint}/videoPlayer?videoId=${videoId}&videoPlaybackTime=0`;
+    newSocket.on("videoIdUpdated", (data) => {
+      if (data.videoId) {
+        const { videoId, videoStartTime } = data;
+        videoRef.current.src = `${endpoint}/videoPlayer?videoId=${videoId}`;
+        videoRef.current.currentTime = videoStartTime;
       } else {
         videoRef.current.src = `passive.mp4`;
       }
@@ -66,7 +68,7 @@ export const JumboTron = (props: JumboTronProps) => {
       <div className="border rounded-lg p-2 w-[864px] h-120">
         <video
           ref={videoRef}
-          controls={true}
+          controls={false}
           className="w-full"
           autoPlay
           playsInline

@@ -70,9 +70,9 @@ export const ControlCenter = () => {
     setGameTime(INITIAL_GAME_TIME);
   };
 
-  const updateVideoId = (videoId: string) => {
+  const updateVideoId = (videoId: string, videoStartTime: number) => {
     if (newSocketRef.current) {
-      newSocketRef.current.emit("updateVideoStream", videoId);
+      newSocketRef.current.emit("updateVideoStream", videoId, videoStartTime);
     }
   }
 

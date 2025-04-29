@@ -2,7 +2,7 @@ import { useState } from "react";
 import { getEndpoint } from "../helpers/endpoints";
 
 type VideoStreamsProps = {
-  updateVideoId: (videoId: string) => void;
+  updateVideoId: (videoId: string, videoStartTime: number) => void;
 };
 
 export const VideoStreams = (props: VideoStreamsProps) => {
@@ -12,7 +12,7 @@ export const VideoStreams = (props: VideoStreamsProps) => {
 
   const handleVideoClickedEvent = (e: any, id: string) => {
     console.log(e.target.currentTime);
-    updateVideoId(id);
+    updateVideoId(id, e.target.currentTime);
     setSelectedVideoId(id);
   };
 
